@@ -29,6 +29,11 @@
 
 magic(<<?M_SOI:16,?M_APP1:16,_Len:16,"Exif",0,0,_/binary>>) -> true;
 magic(<<?M_SOI:16,?M_JFIF:16,_Len:16,"JFIF",_,_,_/binary>>) -> true;
+magic(<<?M_SOI:16,?M_DQT:16,_/binary>>) -> true;
+magic(<<?M_SOI:16,?M_DHT:16,_/binary>>) -> true;
+magic(<<?M_SOI:16,?M_SOF0:16,_/binary>>) -> true;
+magic(<<?M_SOI:16,?M_SOS:16,_/binary>>) -> true;
+magic(<<?M_SOI:16,?M_COM:16,_/binary>>) -> true;
 magic(_) -> false.
 
 mime_type() -> "image/jpeg".
@@ -91,10 +96,12 @@ read_section(Fd,Marker,Len,IMG) ->
                 {ok,_} ->
                     read_sections(Fd, IMG)
             end;
+       Marker == ?M_DQT;
        Marker == ?M_SOF0;
        Marker == ?M_SOF1;
        Marker == ?M_SOF2;
        Marker == ?M_SOF3;
+       Marker == ?M_DHT;
        Marker == ?M_SOF5;
        Marker == ?M_SOF6;
        Marker == ?M_SOF7;
